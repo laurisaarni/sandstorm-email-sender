@@ -1,1 +1,1 @@
-# sandstorm-email-sender
+# Sandstorm mailer docker image
