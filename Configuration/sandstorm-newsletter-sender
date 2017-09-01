@@ -1,0 +1,4 @@
+export AUTH_TOKEN=HKSEY1pDjsVVU8hY99uP6O/ekyQi9ZUR+2p5JfqeVfE=
+
+export REDIS_URL=redis:6379
+export SMTP_URL=mailhog:25

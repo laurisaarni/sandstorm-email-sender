@@ -1,11 +1,11 @@
-FROM ubuntu:14.04
+FROM i386/ubuntu:14.04
 
 MAINTAINER Lauri Saarni <lauri@web-essentials.asia>
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV INITRD No
 ENV LANG en_US.UTF-8
-ENV SANDSTORM_VERSION 1.1.0
+ENV SANDSTORM_VERSION 1.3.0
 
 RUN apt-get update && \
     apt-get upgrade -y && \
@@ -17,8 +17,16 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN cd /tmp && \
-    wget https://github.com/sandstorm/mailer-daemon/blob/master/sandstorm-newsletter_{SANDSTORM_VERSION}_i386.deb?raw=true && \
-    dpkg -i sandstorm-newsletter_{SANDSTORM_VERSION}_i386.deb && \
-    apt-get install -f
+    wget https://packages.web-essentials.asia/boxes/vendor/sandstorm-newsletter-sender_${SANDSTORM_VERSION}_i386.deb
 
-CMD ["bash"]
+RUN dpkg --force-all -i /tmp/sandstorm-newsletter-sender_${SANDSTORM_VERSION}_i386.deb && \
+    apt-get install
+
+COPY Configuration/sandstorm-newsletter-sender /etc/default/sandstorm-newsletter-sender
+
+COPY Scripts/EntryPoint/mailer.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 3000:3000
+
+ENTRYPOINT ["/entrypoint.sh"]
